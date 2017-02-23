@@ -6,4 +6,5 @@
 :contrib:piasy:users:check :contrib:piasy:users:jacocoReport \
 :contrib:piasy:repos:check :contrib:piasy:repos:jacocoReport \
 :contrib:piasy:trending:check :contrib:piasy:trending:jacocoReport \
-:contrib:piasy:splash:check :contrib:piasy:splash:jacocoReport
+:contrib:piasy:splash:check :contrib:piasy:splash:jacocoReport \
+:contrib:piasy:login:check :contrib:piasy:login:jacocoReport

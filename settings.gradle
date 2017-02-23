@@ -4,4 +4,5 @@ include ':base', ':testbase', ':mocks', ':app',
         ':contrib:piasy:users',
 		':contrib:piasy:repos',
 		':contrib:piasy:trending',
-		':contrib:piasy:splash'
+		':contrib:piasy:splash',
+		':contrib:piasy:login'
