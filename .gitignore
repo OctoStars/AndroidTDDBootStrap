@@ -22,5 +22,4 @@ fabric.properties
 /.buckd/
 /.okbuck/
 .buckconfig.local
-.buckconfig
 **/BUCK

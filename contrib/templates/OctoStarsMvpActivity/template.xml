@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<template
+        format="5"
+        revision="5"
+        name="OctoStars Mvp Feature Activity"
+        minApi="7"
+        minBuildApi="14"
+        description="Creates a new Mvp feature activity for OctoStars">
+
+    <category value="Activity"/>
+    <formfactor value="Mobile"/>
+
+    <parameter
+            id="featureName"
+            name="Mvp Feature Name"
+            type="string"
+            constraints="class|unique|nonempty"
+            default="MvpFeature"
+            help="The name of the Mvp feature to create"/>
+
+    <parameter
+            id="layoutName"
+            name="Activity Layout Name"
+            type="string"
+            constraints="layout|unique|nonempty"
+            suggest="activity_${classToResource(featureName)}"
+            default="activity_mvp_feature"
+            help="The name of the layout to create for the Mvp feature activity"/>
+
+    <parameter
+            id="packageName"
+            name="Package name"
+            type="string"
+            constraints="package"
+            default="com.mycompany.myapp"/>
+
+    <parameter
+            id="isLauncher"
+            name="Launcher Activity"
+            type="boolean"
+            default="false"
+            help="If true, this activity will have a CATEGORY_LAUNCHER intent filter, making it visible in the launcher"/>
+
+    <!-- 128x128 thumbnails relative to template.xml -->
+    <thumbs>
+        <!-- default thumbnail is required -->
+        <thumb>template_mvp_feature.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl"/>
+    <execute file="recipe.xml.ftl"/>
+
+</template>

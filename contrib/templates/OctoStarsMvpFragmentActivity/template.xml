@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<template
+        format="5"
+        revision="5"
+        name="Mvp Feature Activity"
+        minApi="7"
+        minBuildApi="14"
+        description="Creates a new Mvp feature activity">
+
+    <category value="Activity"/>
+    <formfactor value="Mobile"/>
+
+    <parameter
+            id="featureName"
+            name="Mvp Feature Name"
+            type="string"
+            constraints="class|unique|nonempty"
+            default="MvpFeature"
+            help="The name of the Mvp feature to create"/>
+
+    <parameter
+            id="useFragment"
+            name="Use Fragment"
+            type="boolean"
+            default="true"
+            help="If true, a fragment will be generated"/>
+
+    <parameter
+            id="layoutName"
+            name="Activity Layout Name"
+            type="string"
+            constraints="layout|unique|nonempty"
+            suggest="activity_${classToResource(featureName)}"
+            default="activity_mvp_feature"
+            visibility="!useFragment"
+            help="The name of the layout to create for the Mvp feature activity"/>
+
+    <parameter
+            id="fragmentName"
+            name="Fragment Name"
+            type="string"
+            constraints="class|nonempty|unique"
+            suggest="${featureName}Fragment"
+            default="MvpFeatureFragment"
+            visibility="useFragment"
+            help="The name of the fragment to create"/>
+
+    <parameter
+            id="createFragmentLayout"
+            name="Create fragment layout"
+            type="boolean"
+            default="true"
+            visibility="useFragment"
+            help="If true, a layout for fragment will be generated"/>
+
+    <parameter
+            id="fragmentLayoutName"
+            name="Fragment Layout Name"
+            type="string"
+            constraints="layout|unique|nonempty"
+            suggest="fragment_${classToResource(fragmentName)}"
+            default="fragment_mvp_feature"
+            visibility="!(!useFragment || !createFragmentLayout)"
+            help="The name of the layout to create for the fragment"/>
+
+    <parameter
+            id="packageName"
+            name="Package name"
+            type="string"
+            constraints="package"
+            default="com.mycompany.myapp"/>
+
+    <parameter
+            id="isLauncher"
+            name="Launcher Activity"
+            type="boolean"
+            default="false"
+            help="If true, this activity will have a CATEGORY_LAUNCHER intent filter, making it visible in the launcher"/>
+
+    <!-- 128x128 thumbnails relative to template.xml -->
+    <thumbs>
+        <!-- default thumbnail is required -->
+        <thumb>template_mvp_feature.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl"/>
+    <execute file="recipe.xml.ftl"/>
+
+</template>

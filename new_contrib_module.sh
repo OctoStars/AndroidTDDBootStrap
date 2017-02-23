@@ -15,7 +15,8 @@ echo "$NEW_MODULE:check $NEW_MODULE:jacocoReport" >> buildsystem/ci.sh
 cp buildsystem/contrib_module_template.gradle ${MOD_PATH}/build.gradle
 echo "/build/" > ${MOD_PATH}/.gitignore
 
-mkdir -p ${MOD_PATH}/src/main/java
-mkdir -p ${MOD_PATH}/src/debug/java
+mkdir -p ${MOD_PATH}/src/main/java/com/github/piasy/octostars/features
+mkdir -p ${MOD_PATH}/src/debug/java/com/github/piasy/octostars/features
 
 cp buildsystem/contrib_module_template_manifest.xml ${MOD_PATH}/src/main/AndroidManifest.xml
+cp buildsystem/contrib_module_template_manifest_debug.xml ${MOD_PATH}/src/debug/AndroidManifest.xml
