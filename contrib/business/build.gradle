@@ -99,6 +99,7 @@ dependencies {
 
     compile project(':contrib:bridge')
 
+    compile featureDependencies.firebaseCore
     compile featureDependencies.fresco
     compile featureDependencies.iconifyMD
     compile featureDependencies.gitSha

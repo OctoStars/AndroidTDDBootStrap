@@ -26,10 +26,12 @@ package com.github.piasy.octostars.di;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.github.piasy.bootstrap.base.model.jsr310.JSR310Module;
 import com.github.piasy.bootstrap.base.model.jsr310.ThreeTenABPDelegate;
+import com.github.piasy.bootstrap.base.model.net.AuthInterceptor;
 import com.github.piasy.bootstrap.base.model.provider.ProviderModule;
 import com.github.piasy.bootstrap.base.utils.ScreenUtil;
 import com.github.piasy.bootstrap.base.utils.ToastUtil;
@@ -86,13 +88,17 @@ public interface AppComponent {
 
     BriteDatabase briteDatabase();
 
+    SharedPreferences sharedPreferences();
+
     RxSharedPreferences rxSharedPreferences();
 
     ThreeTenABPDelegate threeTenABPDelegate();
 
     ToastUtil toastUtil();
 
+    ScreenUtil screenUtil();
+
     RxNetErrorProcessor rxNetErrorProcessor();
 
-    ScreenUtil screenUtil();
+    AuthInterceptor authInterceptor();
 }

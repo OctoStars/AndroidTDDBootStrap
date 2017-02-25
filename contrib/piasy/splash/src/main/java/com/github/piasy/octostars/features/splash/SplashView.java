@@ -31,5 +31,7 @@ import com.github.piasy.yamvp.YaView;
  */
 
 interface SplashView extends YaView {
-    void finishSplash(boolean initSuccess);
+    void login();
+
+    void alreadyLoggedIn();
 }

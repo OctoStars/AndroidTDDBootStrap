@@ -27,4 +27,11 @@ package com.github.piasy.octostars.features.login;
 import com.github.piasy.yamvp.YaView;
 
 interface LoginView extends YaView {
+    void login();
+
+    void loginSuccess();
+
+    void loginFail();
+
+    void showProgress();
 }

@@ -30,6 +30,7 @@ import com.github.piasy.octostars.BootstrapActivity;
 import com.github.piasy.octostars.BootstrapApp;
 import com.github.piasy.octostars.RouteTable;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by Piasy{github.com/Piasy} on 15/9/19.
@@ -50,6 +51,20 @@ public class SplashActivity extends BootstrapActivity<SplashComponent> implement
 
         setContentView(R.layout.activity_splash);
         mPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mPresenter.onActivityStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mPresenter.onActivityStop();
     }
 
     @Override
@@ -79,11 +94,20 @@ public class SplashActivity extends BootstrapActivity<SplashComponent> implement
     }
 
     @Override
-    public void finishSplash(final boolean initSuccess) {
-        if (initSuccess) {
-            Router.build(RouteTable.TRENDING)
-                    .go(this);
-            finish();
-        }
+    public void login() {
+        Timber.d("SplashActivity::login");
+
+        Router.build(RouteTable.LOGIN)
+                .go(this);
+        finish();
+    }
+
+    @Override
+    public void alreadyLoggedIn() {
+        Timber.d("SplashActivity::alreadyLoggedIn");
+
+        Router.build(RouteTable.TRENDING)
+                .go(this);
+        finish();
     }
 }

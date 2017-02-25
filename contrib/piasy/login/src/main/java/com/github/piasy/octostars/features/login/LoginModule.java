@@ -22,25 +22,26 @@
  * SOFTWARE.
  */
 
-package com.github.piasy.octostars.features.trending;
+package com.github.piasy.octostars.features.login;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import com.github.piasy.bootstrap.mocks.DebugSplashActivity;
-import com.github.piasy.octostars.features.trending.TrendingActivity;
+import android.app.Activity;
+import dagger.Module;
+import dagger.Provides;
 
 /**
- * Created by Piasy{github.com/Piasy} on 23/01/2017.
+ * Created by Piasy{github.com/Piasy} on 25/02/2017.
  */
 
-public class TrendingSplash extends DebugSplashActivity {
+@Module
+class LoginModule {
+    private final Activity mActivity;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    LoginModule(final Activity activity) {
+        mActivity = activity;
+    }
 
-        startActivity(new Intent(this, TrendingActivity.class));
-        finish();
+    @Provides
+    Activity provideActivity() {
+        return mActivity;
     }
 }

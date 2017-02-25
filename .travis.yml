@@ -32,6 +32,10 @@ before_script:
 #  - echo no | android create avd --force -n test -t android-18 --abi armeabi-v7a
 #  - emulator -avd test -no-audio -no-window &
   - touch bintray.properties
+  - touch contrib/piasy/login/github_credential.gradle
+  - touch contrib/piasy/login/google-services.json
+  - touch contrib/piasy/splash/google-services.json
+  - touch app/google-services.json
 
 script:
 #  - android-wait-for-emulator

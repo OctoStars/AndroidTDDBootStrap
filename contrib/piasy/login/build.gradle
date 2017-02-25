@@ -30,11 +30,13 @@ if (isComposeBuild) {
     apply plugin: 'com.android.application'
 }
 
+apply plugin: 'com.chenenyu.router'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'de.mobilej.unmock'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'net.ltgt.errorprone'
 apply from: "$rootProject.projectDir/AndroidCodeQualityConfig/quality.gradle"
+apply from: 'github_credential.gradle'
 
 def isTravis = "true" == System.getenv("TRAVIS")
 
@@ -123,6 +125,7 @@ dependencies {
     errorprone aptDependencies.errorprone
 
     compile featureDependencies.GitHubAndroidOAuth
+    compile featureDependencies.firebaseAuth
 
     debugCompile project(path: ':contrib:business', configuration: 'debug')
     debugCompile project(':mocks')
@@ -132,4 +135,8 @@ dependencies {
 
     androidTestCompile project(':mocks')
     androidTestCompile project(':testbase')
+}
+
+if (!isComposeBuild) {
+    apply plugin: 'com.google.gms.google-services'
 }

@@ -28,11 +28,10 @@ package com.github.piasy.octostars;
  * Created by Piasy{github.com/Piasy} on 25/01/2017.
  */
 
-public final class RouteTable {
-    public static final String LOGIN = "login";
-    public static final String TRENDING = "trending";
+public final class PrefKeys {
+    public static final String GITHUB_TOKEN = "GITHUB_TOKEN";
 
-    private RouteTable() {
+    private PrefKeys() {
         // no instance
     }
 }

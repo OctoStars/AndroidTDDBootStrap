@@ -1,6 +1,5 @@
 package com.github.piasy.octostars.repos;
 
-import com.github.piasy.bootstrap.base.rx.DisperseTransformer;
 import com.github.piasy.bootstrap.base.utils.RxUtil;
 import com.github.piasy.yamvp.dagger2.ActivityScope;
 import io.reactivex.Observable;
@@ -36,8 +35,8 @@ public class RepositoryRepo {
     }
 
     public Observable<List<GitHubRepo>> get(final Collection<String> fullNames) {
+        // TODO: 25/02/2017 batch get
         return Observable.fromIterable(fullNames)
-                .compose(new DisperseTransformer<>(500))
                 .flatMap(fullName -> get(fullName, false))
                 .toList()
                 .toObservable();

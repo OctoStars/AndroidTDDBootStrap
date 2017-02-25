@@ -27,12 +27,22 @@
         package="com.github.piasy.octostars.features.login"
         >
 
-        <application
-                android:name="com.github.piasy.octostars.AppShell"
-                android:label="LoginActivity"
-                android:theme="@style/Theme.AppCompat.NoActionBar"
-                tools:replace="label"
-        >
-        </application>
+    <application
+            android:name="com.github.piasy.octostars.AppShell"
+            android:label="LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            tools:replace="label"
+            >
+
+        <activity
+                android:name=".LoginActivity"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>

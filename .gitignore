@@ -23,3 +23,5 @@ fabric.properties
 /.okbuck/
 .buckconfig.local
 **/BUCK
+
+**/google-services.json

@@ -30,6 +30,7 @@ if (isComposeBuild) {
     apply plugin: 'com.android.application'
 }
 
+apply plugin: 'com.chenenyu.router'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'de.mobilej.unmock'
 apply plugin: 'com.github.ben-manes.versions'

@@ -29,7 +29,8 @@ import com.github.piasy.yamvp.dagger2.ActivityScope;
 import dagger.Component;
 
 @ActivityScope
-@Component(dependencies = AppComponent.class)
+@Component(dependencies = AppComponent.class,
+        modules = { LoginModule.class })
 interface LoginComponent {
 
     void inject(LoginActivity activity);

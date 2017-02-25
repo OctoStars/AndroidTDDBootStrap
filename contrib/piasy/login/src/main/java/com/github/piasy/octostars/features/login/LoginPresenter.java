@@ -24,14 +24,81 @@
 
 package com.github.piasy.octostars.features.login;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import com.github.piasy.bootstrap.base.model.net.AuthInterceptor;
+import com.github.piasy.oauth3.github.model.GitHubUser;
+import com.github.piasy.octostars.PrefKeys;
 import com.github.piasy.yamvp.dagger2.ActivityScope;
 import com.github.piasy.yamvp.rx.YaRxPresenter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GithubAuthProvider;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 @ActivityScope
-class LoginPresenter extends YaRxPresenter<LoginView> {
+class LoginPresenter extends YaRxPresenter<LoginView>
+        implements FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult> {
+
+    private final Activity mActivity;
+    private final AuthInterceptor mAuthInterceptor;
+    private final SharedPreferences mPreferences;
+    private final FirebaseAuth mFirebaseAuth;
+
     @Inject
-    LoginPresenter() {
+    LoginPresenter(final Activity activity, final AuthInterceptor authInterceptor,
+            final SharedPreferences preferences) {
         super();
+        mActivity = activity;
+        mAuthInterceptor = authInterceptor;
+        mPreferences = preferences;
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+    }
+
+    void onActivityStart() {
+        mFirebaseAuth.addAuthStateListener(this);
+    }
+
+    void onActivityStop() {
+        mFirebaseAuth.removeAuthStateListener(this);
+    }
+
+    void onGitHubOAuthSuccess(final String token, final GitHubUser gitHubUser) {
+        Timber.d("LoginPresenter::onGitHubOAuthSuccess " + token);
+
+        getView().showProgress();
+        mPreferences.edit().putString(PrefKeys.GITHUB_TOKEN, token).apply();
+        mAuthInterceptor.updateAuth(token);
+
+        final AuthCredential credential = GithubAuthProvider.getCredential(token);
+        mFirebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(mActivity, this);
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
+        final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        Timber.d("LoginPresenter::onAuthStateChanged " + currentUser);
+        if (currentUser == null) {
+            getView().login();
+        } else {
+            getView().loginSuccess();
+        }
+    }
+
+    @Override
+    public void onComplete(@NonNull final Task<AuthResult> task) {
+        Timber.d("LoginPresenter::onComplete " + task.isSuccessful());
+        if (!task.isSuccessful()) {
+            Timber.e(task.getException());
+            getView().loginFail();
+        }
     }
 }

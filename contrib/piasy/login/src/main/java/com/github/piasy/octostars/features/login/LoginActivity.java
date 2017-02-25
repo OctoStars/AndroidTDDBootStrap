@@ -24,32 +24,76 @@
 
 package com.github.piasy.octostars.features.login;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.Window;
 import com.chenenyu.router.Router;
+import com.chenenyu.router.annotation.Route;
+import com.github.piasy.bootstrap.base.utils.ToastUtil;
+import com.github.piasy.oauth3.github.GitHubOAuth;
+import com.github.piasy.oauth3.github.model.GitHubUser;
 import com.github.piasy.octostars.BootstrapActivity;
 import com.github.piasy.octostars.BootstrapApp;
 import com.github.piasy.octostars.RouteTable;
 import javax.inject.Inject;
+import timber.log.Timber;
 
-public class LoginActivity extends BootstrapActivity<LoginComponent> implements LoginView {
+@Route(RouteTable.LOGIN)
+public class LoginActivity extends BootstrapActivity<LoginComponent>
+        implements LoginView, GitHubOAuth.Listener {
 
     @Inject
     LoginPresenter mPresenter;
+    @Inject
+    ToastUtil mToastUtil;
 
     private LoginComponent mLoginComponent;
+    private GitHubOAuth mGitHubOAuth;
+    private ProgressDialog mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
         mPresenter.attachView(this);
+
+        mGitHubOAuth = GitHubOAuth.builder()
+                .clientId(BuildConfig.GITHUB_CLIENT_ID)
+                .clientSecret(BuildConfig.GITHUB_CLIENT_SECRET)
+                .scope("public_repo")
+                .redirectUrl(BuildConfig.GITHUB_OAUTH_REDIRECT_URL)
+                .build();
+
+        mProgress = new ProgressDialog(this);
+        mProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mPresenter.onActivityStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mProgress.hide();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mPresenter.onActivityStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+        mProgress.dismiss();
         mPresenter.detachView();
         mPresenter.onDestroy();
     }
@@ -58,6 +102,7 @@ public class LoginActivity extends BootstrapActivity<LoginComponent> implements 
     protected void initializeDi() {
         mLoginComponent = DaggerLoginComponent.builder()
                 .appComponent(BootstrapApp.get().appComponent())
+                .loginModule(new LoginModule(this))
                 .build();
         mLoginComponent.inject(this);
     }
@@ -65,5 +110,39 @@ public class LoginActivity extends BootstrapActivity<LoginComponent> implements 
     @Override
     public LoginComponent getComponent() {
         return mLoginComponent;
+    }
+
+    @Override
+    public void onSuccess(final String token, final GitHubUser gitHubUser) {
+        mPresenter.onGitHubOAuthSuccess(token, gitHubUser);
+    }
+
+    @Override
+    public void onFail(final String error) {
+        loginFail();
+    }
+
+    @Override
+    public void login() {
+        mGitHubOAuth.authorize(this);
+    }
+
+    @Override
+    public void loginSuccess() {
+        Timber.d("LoginActivity::loginSuccess");
+
+        Router.build(RouteTable.TRENDING)
+                .go(this);
+        finish();
+    }
+
+    @Override
+    public void loginFail() {
+        mToastUtil.toast(R.string.login_fail_hint);
+    }
+
+    @Override
+    public void showProgress() {
+        mProgress.show();
     }
 }

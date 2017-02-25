@@ -115,6 +115,8 @@ dependencies {
     retrolambdaConfig aptDependencies.retrolambda
     errorprone aptDependencies.errorprone
 
+    compile featureDependencies.firebaseAuth
+
     debugCompile project(path: ':contrib:business', configuration: 'debug')
 
     testCompile project(':mocks')
@@ -122,4 +124,8 @@ dependencies {
 
     androidTestCompile project(':mocks')
     androidTestCompile project(':testbase')
+}
+
+if (!isComposeBuild) {
+    apply plugin: 'com.google.gms.google-services'
 }

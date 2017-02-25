@@ -24,8 +24,14 @@
 
 package com.github.piasy.octostars.features.splash;
 
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import com.github.piasy.bootstrap.base.model.net.AuthInterceptor;
+import com.github.piasy.octostars.PrefKeys;
 import com.github.piasy.yamvp.dagger2.ActivityScope;
 import com.github.piasy.yamvp.rx.YaRxPresenter;
+import com.google.firebase.auth.FirebaseAuth;
 import javax.inject.Inject;
 
 /**
@@ -33,37 +39,40 @@ import javax.inject.Inject;
  */
 
 @ActivityScope
-class SplashPresenter extends YaRxPresenter<SplashView> {
+class SplashPresenter extends YaRxPresenter<SplashView> implements FirebaseAuth.AuthStateListener {
+
+    private final AuthInterceptor mAuthInterceptor;
+    private final SharedPreferences mPreferences;
+    private final FirebaseAuth mFirebaseAuth;
+
     @Inject
-    SplashPresenter() {
+    SplashPresenter(final AuthInterceptor authInterceptor, final SharedPreferences preferences) {
         super();
+        mAuthInterceptor = authInterceptor;
+        mPreferences = preferences;
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+    }
+
+    void onActivityStart() {
+        mFirebaseAuth.addAuthStateListener(this);
+    }
+
+    void onActivityStop() {
+        mFirebaseAuth.removeAuthStateListener(this);
     }
 
     @Override
-    public void attachView(final SplashView view) {
-        super.attachView(view);
-        getView().finishSplash(true);
-        //addUtilDestroy(Observable
-        //        .fromCallable(() -> {
-        //            final Application app = BootstrapApp.application();
-        //            if ("release".equals(BuildConfig.BUILD_TYPE)) {
-        //                Timber.plant(new CrashReportingTree());
-        //                Fabric.with(app, new Crashlytics(), new Answers());
-        //                Crashlytics.setString("git_sha", GitShaUtils.getGitSha(app));
-        //            } else {
-        //                Timber.plant(new Timber.DebugTree());
-        //            }
-        //
-        //            Iconify.with(new MaterialModule());
-        //            Router.initialize(app);
-        //
-        //            return true;
-        //        })
-        //        .subscribeOn(Schedulers.io())
-        //        .subscribe(success -> {
-        //            if (isViewAttached()) {
-        //                getView().finishSplash(success);
-        //            }
-        //        }, RxUtil.OnErrorLogger));
+    public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
+        String githubToken = mPreferences.getString(PrefKeys.GITHUB_TOKEN, "");
+        if (firebaseAuth.getCurrentUser() == null) {
+            getView().login();
+        } else if (TextUtils.isEmpty(githubToken)) {
+            firebaseAuth.signOut();
+            getView().login();
+        } else {
+            mAuthInterceptor.updateAuth(githubToken);
+            getView().alreadyLoggedIn();
+        }
     }
 }

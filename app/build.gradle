@@ -130,8 +130,9 @@ dependencies {
     releaseCompile project(path: ':contrib:business', configuration: 'release')
 
     if (isComposeBuild) {
-        compile project(':contrib:piasy:trending')
         compile project(':contrib:piasy:splash')
+        compile project(':contrib:piasy:login')
+        compile project(':contrib:piasy:trending')
     }
 
     compile featureDependencies.rxJavaProGuardRules
@@ -157,4 +158,8 @@ dependencies {
     androidTestCompile project(':mocks')
     androidTestCompile project(':testbase')
     androidTestAnnotationProcessor aptDependencies.daggerApt
+}
+
+if (isComposeBuild) {
+    apply plugin: 'com.google.gms.google-services'
 }

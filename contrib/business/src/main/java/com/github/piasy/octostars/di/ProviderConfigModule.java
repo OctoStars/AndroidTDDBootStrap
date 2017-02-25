@@ -26,14 +26,15 @@ package com.github.piasy.octostars.di;
 
 import android.content.Context;
 import com.github.piasy.bootstrap.base.model.jsr310.ThreeTenABPDelegate;
+import com.github.piasy.bootstrap.base.model.net.AuthInterceptor;
 import com.github.piasy.bootstrap.base.model.provider.BriteDbConfig;
 import com.github.piasy.bootstrap.base.model.provider.EventBusConfig;
 import com.github.piasy.bootstrap.base.model.provider.GsonConfig;
 import com.github.piasy.bootstrap.base.model.provider.HttpClientConfig;
 import com.github.piasy.bootstrap.base.model.provider.RetrofitConfig;
 import com.github.piasy.bootstrap.base.model.provider.SharedPreferenceConfig;
-import com.github.piasy.octostars.business.BuildConfig;
 import com.github.piasy.octostars.bridge.DbOpenHelper;
+import com.github.piasy.octostars.business.BuildConfig;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -123,5 +124,11 @@ public class ProviderConfigModule {
                 .name("OctoStars_sp")
                 .mode(Context.MODE_PRIVATE)
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    AuthInterceptor provideAuthInterceptor() {
+        return new AuthInterceptor("access_token", true);
     }
 }

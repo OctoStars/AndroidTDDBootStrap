@@ -1,12 +1,15 @@
 package ${featurePackageName};
 
 import android.os.Bundle;
-import com.chenenyu.router.Router;
+import com.github.piasy.octostars.RouteTable;
+import butterknife.ButterKnife;
+import com.chenenyu.router.annotation.Route;
 import com.github.piasy.octostars.BootstrapActivity;
 import com.github.piasy.octostars.BootstrapApp;
 import com.github.piasy.octostars.RouteTable;
 import javax.inject.Inject;
 
+@Route(RouteTable.${featureName?upper_case})
 public class ${activityClass} extends BootstrapActivity<${featureName}Component> implements ${featureName}View {
 
     @Inject
@@ -19,6 +22,7 @@ public class ${activityClass} extends BootstrapActivity<${featureName}Component>
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.${layoutName});
+        ButterKnife.bind(this);
         mPresenter.attachView(this);
     }
 
